@@ -30,8 +30,8 @@ Este projeto é uma aplicação web desenvolvida com **Next.js** e **Tailwind CS
 ### 1. Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-cd nome-do-repositorio
+git clone https://github.com/MatheusLWinkelmann/teste-genezys.git
+cd teste-genezys
 ```
 
 ### 2. Instalar Dependências

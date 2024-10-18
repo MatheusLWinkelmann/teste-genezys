@@ -1,19 +1,10 @@
 import React from 'react';
 import Button from './Button';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useAuth } from '../context/AuthContext';
+import useNavBar from '../hooks/useNavBar';
 
 export default function NavBar() {
-  const router = useRouter();
-  const { loggedInUser, logout } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-  };
-
-  const isHomePage = router.pathname === '/home';
-  const isRegisterPage = router.pathname === '/register';
+  const { loggedInUser, isHomePage, isRegisterPage, handleLogout, router } = useNavBar();
 
   return (
     <nav className="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-gray-300 bg-opacity-60 backdrop-blur-lg z-50">

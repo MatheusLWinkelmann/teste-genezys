@@ -1,54 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { useAuth } from '../context/AuthContext';
 import PasswordReset from './password-reset';
+import useLogin from '../hooks/useLogin';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 export default function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isPasswordReset, setIsPasswordReset] = useState(false);
-  const { login } = useAuth();
-  const router = useRouter();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.email || !formData.password) {
-      setHasError(true);
-      setErrorMessage('Preencha os dados');
-      return;
-    }
-
-    const result = await login(formData.email, formData.password, rememberMe);
-
-    if (result.error) {
-      setHasError(true);
-      setErrorMessage(result.error);
-    } else if (result.success) {
-      setHasError(false);
-      router.push('/home');
-    }
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleBackToLogin = () => {
-    setIsPasswordReset(false);
-  };
+  const {
+    formData,
+    rememberMe,
+    showPassword,
+    hasError,
+    errorMessage,
+    isPasswordReset,
+    handleChange,
+    handleSubmit,
+    togglePasswordVisibility,
+    handleRememberMe,
+    handlePasswordReset,
+    handleBackToLogin,
+  } = useLogin();
 
   return (
     <div className="min-h-screen grid grid-cols-5" style={{ background: 'linear-gradient(to top right, #1a1a1a 30%, #3b5b78 60%, #e6e6e6 90%)' }}>
@@ -68,7 +40,9 @@ export default function Login() {
       <div className="col-span-2 flex" style={{ background: '#1a1a1a', padding: '2.5rem' }}>
         <div className="w-full max-w-md">
           {isPasswordReset ? (
-            <PasswordReset onBackToLogin={handleBackToLogin} />
+            <div className="h-full flex flex-col">
+              <PasswordReset onBackToLogin={handleBackToLogin} />
+            </div>
           ) : (
             <>
               <h2 className="text-2xl font-bold mb-2 text-white">Olá, seja bem-vindo(a) 👋</h2>
@@ -78,7 +52,7 @@ export default function Login() {
                 <Input
                   label="E-mail"
                   name="email"
-                  value={formData.email}
+                  value={formData.email || ''}
                   onChange={handleChange}
                   placeholder="Insira seu email aqui"
                   className="w-full bg-transparent text-[#888888] border-b border-[#888888] focus:outline-none focus:ring-0 mb-4"
@@ -88,7 +62,7 @@ export default function Login() {
                     label="Senha"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    value={formData.password}
+                    value={formData.password || ''}
                     onChange={handleChange}
                     placeholder="Digite sua senha"
                     className="w-full bg-transparent text-[#888888] border-b border-[#888888] focus:outline-none focus:ring-0"
@@ -100,12 +74,12 @@ export default function Login() {
 
                 <div className="flex items-center justify-between mb-6">
                   <label className="flex items-center text-gray-400">
-                    <input type="checkbox" className="mr-2" checked={rememberMe} onChange={() => setRememberMe(!rememberMe)} />
+                    <input type="checkbox" className="mr-2" checked={rememberMe} onChange={handleRememberMe} />
                     Lembrar das informações
                   </label>
-                  <button type="button" onClick={() => setIsPasswordReset(true)} className="text-blue-500"> {/* Altera para true ao clicar */}
+                  <Link href="#" onClick={handlePasswordReset} className="text-blue-500">
                     Esqueci a senha
-                  </button>
+                  </Link>
                 </div>
 
                 <Button type="submit" hasError={hasError} className="w-full py-2 font-bold">

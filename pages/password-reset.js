@@ -1,32 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
+import usePasswordReset from '../hooks/usePasswordReset';
 
 export default function PasswordReset({ onBackToLogin }) {
-  const [email, setEmail] = useState('');
-  const [emailSent, setEmailSent] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('userData')) || [];
-    const userExists = users.find(user => user.email === email);
-
-    if (!userExists) {
-      setHasError(true);
-      setErrorMessage('E-mail não cadastrado');
-      return;
-    }
-
-    setHasError(false);
-    setEmailSent(true);
-  };
+  const {
+    email,
+    emailSent,
+    hasError,
+    errorMessage,
+    handleChange,
+    handleSubmit,
+  } = usePasswordReset();
 
   return (
     <div className="flex flex-col justify-center h-full max-h-[50vh] mt-10">
